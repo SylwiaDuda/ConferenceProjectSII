@@ -11,11 +11,6 @@ import java.util.Set;
 @Table(name = "lectures")
 public class Lecture extends BasicEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_lecture")
-    private int id;
-
     @Column(name = "lecture_name")
     @NotNull
     private String lectureName;
@@ -27,13 +22,14 @@ public class Lecture extends BasicEntity {
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "Lectures_Users",
-            joinColumns = { @JoinColumn(name = "id_lecture") },
-            inverseJoinColumns = { @JoinColumn(name = "id_user") }
+            joinColumns = {@JoinColumn(name = "id_lecture")},
+            inverseJoinColumns = {@JoinColumn(name = "id_user")}
     )
     @Max(5)
     private Set<User> participantsOfLecture = new HashSet<User>(0);
 
-    public Lecture() { }
+    public Lecture() {
+    }
 
     public Lecture(@NotNull String lectureName, @NotNull Timestamp startDate) {
         this.lectureName = lectureName;
@@ -44,14 +40,6 @@ public class Lecture extends BasicEntity {
         this.lectureName = lectureName;
         this.startDate = startDate;
         this.participantsOfLecture = participantsOfLecture;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getLectureName() {
@@ -76,5 +64,14 @@ public class Lecture extends BasicEntity {
 
     public void setParticipantsOfLecture(Set<User> participantsOfLecture) {
         this.participantsOfLecture = participantsOfLecture;
+    }
+
+    @Override
+    public String toString() {
+        return "Lecture{" +
+                "lectureName='" + lectureName + '\'' +
+                ", startDate=" + startDate +
+                ", participantsOfLecture=" + participantsOfLecture +
+                '}';
     }
 }
