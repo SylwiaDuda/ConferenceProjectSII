@@ -46,7 +46,7 @@ public class MainView extends HorizontalLayout {
 
     }
 
-    public void createMenu() {
+    private void createMenu() {
 
         menu = new CssLayout();
         menu.setWidth("200");
