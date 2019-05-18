@@ -1,4 +1,4 @@
-package com.pl.conference.entity;
+package com.pl.conference.data.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -26,7 +26,7 @@ public class Lecture extends BasicEntity {
             inverseJoinColumns = {@JoinColumn(name = "id_user")}
     )
     @Max(5)
-    private Set<User> participantsOfLecture = new HashSet<User>(0);
+    private Set<User> participantsOfLecture = new HashSet<>(0);
 
     public Lecture() {
     }
