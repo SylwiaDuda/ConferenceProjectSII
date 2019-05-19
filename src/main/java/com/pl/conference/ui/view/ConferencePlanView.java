@@ -2,7 +2,6 @@ package com.pl.conference.ui.view;
 
 import com.pl.conference.data.entity.Lecture;
 import com.pl.conference.service.LectureService;
-import com.pl.conference.service.UserService;
 import com.pl.conference.ui.view.components.ConferencePlanRow;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -11,9 +10,6 @@ import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 @SpringView
