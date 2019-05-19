@@ -1,4 +1,4 @@
-package com.pl.conference.entity;
+package com.pl.conference.data.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
