@@ -1,9 +1,8 @@
 package com.pl.conference.data.entity;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,28 +14,29 @@ public class Lecture extends BasicEntity {
     @NotNull
     private String lectureName;
 
+
     @Column(name = "start_date")
     @NotNull
-    private Timestamp startDate;
+    private Date startDate;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "Lectures_Users",
             joinColumns = {@JoinColumn(name = "id_lecture")},
             inverseJoinColumns = {@JoinColumn(name = "id_user")}
     )
-    @Max(5)
+    //@Max(5)
     private Set<User> participantsOfLecture = new HashSet<>(0);
 
     public Lecture() {
     }
 
-    public Lecture(@NotNull String lectureName, @NotNull Timestamp startDate) {
+    public Lecture(@NotNull String lectureName, @NotNull Date startDate) {
         this.lectureName = lectureName;
         this.startDate = startDate;
     }
 
-    public Lecture(@NotNull String lectureName, @NotNull Timestamp startDate, Set<User> participantsOfLecture) {
+    public Lecture(@NotNull String lectureName, @NotNull Date startDate, Set<User> participantsOfLecture) {
         this.lectureName = lectureName;
         this.startDate = startDate;
         this.participantsOfLecture = participantsOfLecture;
@@ -50,11 +50,11 @@ public class Lecture extends BasicEntity {
         this.lectureName = lectureName;
     }
 
-    public Timestamp getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Timestamp startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
