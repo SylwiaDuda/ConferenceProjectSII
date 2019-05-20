@@ -1,6 +1,7 @@
 package com.pl.conference.ui;
 
 import com.pl.conference.ui.navigation.NavigationManager;
+import com.pl.conference.ui.navigation.SessionManager;
 import com.pl.conference.ui.view.ConferencePlanView;
 import com.pl.conference.ui.view.SettingsView;
 import com.pl.conference.ui.view.SignInView;
@@ -8,7 +9,7 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class MainView extends HorizontalLayout {
+public class MainView extends HorizontalLayout{
 
     private static final String TITLE = "KONFERENCJA";
     private static final String CAPTION_CONFERENCE_PLAN = "Plan konferencji";
@@ -87,9 +88,14 @@ public class MainView extends HorizontalLayout {
     }
 
     private void createLogOutButton() {
-        logOut = new Button(CAPTION_LOG_OUT, e -> navigationManager.navigateTo(ConferencePlanView.class));
+        logOut = new Button(CAPTION_LOG_OUT, e ->logout());
         logOut.addStyleName(ValoTheme.BUTTON_LINK);
         logOut.addStyleName(ValoTheme.MENU_ITEM);
         logOut.setIcon(VaadinIcons.SIGN_OUT);
+    }
+
+    private void logout(){
+        UI ui = getUI();
+        SessionManager.closeVaadinSession(ui);
     }
 }
