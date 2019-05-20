@@ -68,7 +68,7 @@ public class LectureComponent extends VerticalLayout {
         }
         onComponentChange.accept(this);
     }
-    
+
     private void reserve() {
         UI ui = getUI().getCurrent();
         User user = SessionManager.getLoggedInUser(ui);

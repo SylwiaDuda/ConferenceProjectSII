@@ -91,6 +91,7 @@ public class UserService {
         user.setLectures(lectures);
         userDAO.saveAndFlush(user);
         lectureDAO.saveAndFlush(lecture);
+        MailService.sendEmail(user,lecture);
         return user;
     }
 }

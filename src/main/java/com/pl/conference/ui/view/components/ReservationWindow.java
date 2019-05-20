@@ -2,6 +2,7 @@ package com.pl.conference.ui.view.components;
 
 import com.pl.conference.data.entity.Lecture;
 import com.pl.conference.data.entity.User;
+import com.pl.conference.service.MailService;
 import com.pl.conference.service.UserService;
 import com.pl.conference.ui.navigation.SessionManager;
 import com.vaadin.server.Page;
