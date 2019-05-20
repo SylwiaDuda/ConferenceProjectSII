@@ -1,12 +1,15 @@
 package com.pl.conference.ui;
 
 import com.pl.conference.ui.navigation.NavigationManager;
+import com.pl.conference.ui.navigation.SessionManager;
 import com.pl.conference.ui.view.ConferencePlanView;
 import com.pl.conference.ui.view.SettingsView;
 import com.pl.conference.ui.view.SignInView;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+
+import java.util.Objects;
 
 public class MainView extends HorizontalLayout {
 
@@ -43,7 +46,6 @@ public class MainView extends HorizontalLayout {
 
         setExpandRatio(content, 1.0F);
         setSizeFull();
-
     }
 
     private void createMenu() {
@@ -61,8 +63,16 @@ public class MainView extends HorizontalLayout {
         createSettingsButton();
         createSignInButton();
         createLogOutButton();
+        addMenuComponents();
+    }
 
-        menu.addComponents(title, conferencePlan, settings, logOut, signIn);
+    private void addMenuComponents() {
+        String loggedInUser = SessionManager.getLoggedInUserEmail(getUI());
+        if (Objects.isNull(loggedInUser)) {
+            menu.addComponents(title, conferencePlan, signIn);
+        } else {
+            menu.addComponents(title, conferencePlan, settings, logOut);
+        }
     }
 
     private void createConferencePlanButton() {
@@ -87,9 +97,15 @@ public class MainView extends HorizontalLayout {
     }
 
     private void createLogOutButton() {
-        logOut = new Button(CAPTION_LOG_OUT, e -> navigationManager.navigateTo(ConferencePlanView.class));
+        logOut = new Button(CAPTION_LOG_OUT, e -> logout());
         logOut.addStyleName(ValoTheme.BUTTON_LINK);
         logOut.addStyleName(ValoTheme.MENU_ITEM);
         logOut.setIcon(VaadinIcons.SIGN_OUT);
+    }
+
+    private void logout() {
+        UI ui = getUI();
+        SessionManager.closeVaadinSession(ui);
+        navigationManager.navigateToDefaultView();
     }
 }

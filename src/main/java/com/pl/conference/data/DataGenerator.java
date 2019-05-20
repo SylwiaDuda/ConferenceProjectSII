@@ -18,7 +18,6 @@ public class DataGenerator {
     public CommandLineRunner loadData(UserDAO userDAO, LectureDAO lectureDAO) {
         return args -> {
             if (hasData(lectureDAO) || hasData(lectureDAO)) {
-                //System.out.println("Using existing database");
                 return;
             }
             for (int i = 1; i <= 10; i++) {
@@ -35,7 +34,6 @@ public class DataGenerator {
                 Lecture lecture = new Lecture("Lecture" + i, date);
                 lectureDAO.save(lecture);
             }
-            //System.out.println("Generated data");
         };
     }
 

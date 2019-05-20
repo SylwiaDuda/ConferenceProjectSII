@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @SpringUI
 @Title("Konferencja")
+
 public class AppUI extends UI {
 
     private final SpringViewProvider springViewProvider;
@@ -24,10 +25,8 @@ public class AppUI extends UI {
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
-        //UI.getCurrent().setPollInterval(5000);
         mainView = new MainView(navigationManager);
         mainView.build();
-
         setContent(mainView);
         navigationManager.init(this, mainView.getContent());
         navigationManager.navigateToDefaultView();

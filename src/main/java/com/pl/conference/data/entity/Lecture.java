@@ -25,7 +25,6 @@ public class Lecture extends BasicEntity {
             joinColumns = {@JoinColumn(name = "id_lecture")},
             inverseJoinColumns = {@JoinColumn(name = "id_user")}
     )
-    //@Max(5)
     private Set<User> participantsOfLecture = new HashSet<>(0);
 
     public Lecture() {
