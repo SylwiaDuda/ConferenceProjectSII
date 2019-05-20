@@ -9,7 +9,9 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class MainView extends HorizontalLayout{
+import java.util.Objects;
+
+public class MainView extends HorizontalLayout {
 
     private static final String TITLE = "KONFERENCJA";
     private static final String CAPTION_CONFERENCE_PLAN = "Plan konferencji";
@@ -62,8 +64,17 @@ public class MainView extends HorizontalLayout{
         createSettingsButton();
         createSignInButton();
         createLogOutButton();
+        //addMenuComponents();
+        menu.addComponents(title, conferencePlan, signIn, settings, logOut);
+    }
 
-        menu.addComponents(title, conferencePlan, settings, logOut, signIn);
+    private void addMenuComponents() {
+        String loggedInUser = SessionManager.getLoggedInUser(getUI());
+        if (Objects.isNull(loggedInUser)) {
+            menu.addComponents(title, conferencePlan, signIn);
+        } else {
+            menu.addComponents(title, conferencePlan, settings, logOut);
+        }
     }
 
     private void createConferencePlanButton() {
@@ -88,13 +99,13 @@ public class MainView extends HorizontalLayout{
     }
 
     private void createLogOutButton() {
-        logOut = new Button(CAPTION_LOG_OUT, e ->logout());
+        logOut = new Button(CAPTION_LOG_OUT, e -> logout());
         logOut.addStyleName(ValoTheme.BUTTON_LINK);
         logOut.addStyleName(ValoTheme.MENU_ITEM);
         logOut.setIcon(VaadinIcons.SIGN_OUT);
     }
 
-    private void logout(){
+    private void logout() {
         UI ui = getUI();
         SessionManager.closeVaadinSession(ui);
     }

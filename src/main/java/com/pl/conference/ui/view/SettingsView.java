@@ -1,13 +1,12 @@
 package com.pl.conference.ui.view;
 
+import com.pl.conference.data.entity.User;
 import com.pl.conference.service.UserService;
 import com.pl.conference.ui.navigation.NavigationManager;
-import com.vaadin.data.HasValue;
+import com.pl.conference.ui.navigation.SessionManager;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.ErrorMessage;
-import com.vaadin.server.UserError;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +17,7 @@ import java.util.Objects;
 @SpringView
 public class SettingsView extends VerticalLayout implements View {
 
+    public static final String INCORRECT_DATA = "Błędne dane";
     private static final String TITLE = "Aktualizacja e-mail";
     private static final String CAPTION_PASSWORD = "Hasło:";
     private static final String CAPTION_ENTER_EMAIL = "Wprowadź nowy e-mail:";
@@ -47,6 +47,14 @@ public class SettingsView extends VerticalLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
+
+        String loggedInUser = SessionManager.getLoggedInUser(getUI());
+        if (Objects.isNull(loggedInUser)) {
+            navigationManager.navigateTo(ConferencePlanView.class);
+        } else {
+            this.removeAllComponents();
+            init();
+        }
     }
 
     private void buildSettingsPanel() {
@@ -70,41 +78,42 @@ public class SettingsView extends VerticalLayout implements View {
     private void createSettingsFormComponents() {
 
         passwordField = new PasswordField(CAPTION_PASSWORD);
-        passwordField.addFocusListener(event -> clearNotification());
         emailField = new TextField(CAPTION_ENTER_EMAIL);
-        emailField.addFocusListener(event -> clearNotification());
         repeatEmailField = new TextField(CAPTION_REPEAT_EMAIL);
-        repeatEmailField.addFocusListener(event -> clearNotification());
         saveButton = new Button(CAPTION_SAVE);
         saveButton.addClickListener(clickEvent -> save());
     }
 
     private void save() {
+
         String password = passwordField.getValue();
         String enteredEmail = emailField.getValue();
         String repeatedEmail = repeatEmailField.getValue();
 
-        validation(password, enteredEmail, repeatedEmail);
+        boolean correctValidation = correctValidation(password, enteredEmail, repeatedEmail);
+        if (correctValidation) {
+            User user = userService.changeEmail(SessionManager.getLoggedInUser(getUI()), enteredEmail, password);
+            if (Objects.nonNull(user)) {
+                UI ui = this.getUI();
+                SessionManager.setLoggedInUser(ui, enteredEmail);
+            } else {
+                Notification.show(INCORRECT_DATA, Notification.Type.ERROR_MESSAGE);
+            }
+        } else {
+            Notification.show(INCORRECT_DATA, Notification.Type.ERROR_MESSAGE);
+        }
     }
 
 
-    private boolean validation(String password, String enteredEmail, String repeatedEmail) {
-        boolean sameEmail = enteredEmail.equals(repeatedEmail);
+    private boolean correctValidation(String password, String enteredEmail, String repeatedEmail) {
 
-        if (!sameEmail) {
-            repeatEmailField.setComponentError(new UserError("Błędne dane"));
-            Notification.show("Wprowadzono inne adresy E-mail!", Notification.Type.ERROR_MESSAGE);
+        if (Objects.isNull(enteredEmail) || Objects.isNull(repeatedEmail) || Objects.isNull(password)) {
             return false;
         }
-
-//        if(Objects.isNull(enteredEmail) || Objects.isNull(repeatedEmail) || Objects.isNull(password)){
-//
-//        }
+        boolean sameEmail = enteredEmail.equals(repeatedEmail);
+        if (!sameEmail) {
+            return false;
+        }
         return true;
-    }
-
-    private void clearNotification() {
-        repeatEmailField.setComponentError(null);
-
     }
 }

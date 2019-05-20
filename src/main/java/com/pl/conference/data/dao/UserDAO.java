@@ -9,9 +9,9 @@ public interface UserDAO extends BasicDAO<User, Long> {
 
     User findUserByEmail(String email);
 
+    User findUserByEmailAndPassword(String email, String password);
+
     @Query("SELECT e.email, e.password FROM User e")
     List<Object[]> findUserSignInData();
 
-//    @Query("SELECT p.password FROM User p where p.email =? 1")
-//    String findUserPassword(String en);
 }

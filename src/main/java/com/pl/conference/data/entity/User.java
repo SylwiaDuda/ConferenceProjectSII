@@ -21,7 +21,7 @@ public class User extends BasicEntity {
     @NotNull
     private String password;
 
-    @ManyToMany(mappedBy = "participantsOfLecture")
+    @ManyToMany(mappedBy = "participantsOfLecture", fetch = FetchType.EAGER)
     private Set<Lecture> lectures = new HashSet<>();
 
     public User() {
