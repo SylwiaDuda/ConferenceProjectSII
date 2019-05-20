@@ -1,0 +1,3 @@
+Data wyslania: 20-05-2019 22:20:29
+Do: user1@vp.pl
+Dokonano reserwacji na prelekcję: Lecture1. Termin: 01-06-2019 10:00:00
