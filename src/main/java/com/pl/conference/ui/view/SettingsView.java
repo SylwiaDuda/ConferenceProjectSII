@@ -7,6 +7,7 @@ import com.pl.conference.ui.navigation.SessionManager;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.Page;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ import java.util.Objects;
 @SpringView
 public class SettingsView extends VerticalLayout implements View {
 
-    public static final String INCORRECT_DATA = "Błędne dane";
+    private static final String INCORRECT_DATA = "Błędne dane!";
     private static final String TITLE = "Aktualizacja e-mail";
     private static final String CAPTION_PASSWORD = "Hasło:";
     private static final String CAPTION_ENTER_EMAIL = "Wprowadź nowy e-mail:";
@@ -48,7 +49,7 @@ public class SettingsView extends VerticalLayout implements View {
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
 
-        String loggedInUser = SessionManager.getLoggedInUser(getUI());
+        User loggedInUser = SessionManager.getLoggedInUser(getUI());
         if (Objects.isNull(loggedInUser)) {
             navigationManager.navigateTo(ConferencePlanView.class);
         } else {
@@ -92,10 +93,14 @@ public class SettingsView extends VerticalLayout implements View {
 
         boolean correctValidation = correctValidation(password, enteredEmail, repeatedEmail);
         if (correctValidation) {
-            User user = userService.changeEmail(SessionManager.getLoggedInUser(getUI()), enteredEmail, password);
+            String email = SessionManager.getLoggedInUserEmail(getUI());
+            User user = userService.changeEmail(email, enteredEmail, password);
             if (Objects.nonNull(user)) {
                 UI ui = this.getUI();
-                SessionManager.setLoggedInUser(ui, enteredEmail);
+                Page page = ui.getPage();
+                SessionManager.setLoggedInUser(ui, user);
+                page.reload();
+                Notification.show("Zmieniono dane");
             } else {
                 Notification.show(INCORRECT_DATA, Notification.Type.ERROR_MESSAGE);
             }
@@ -104,16 +109,11 @@ public class SettingsView extends VerticalLayout implements View {
         }
     }
 
-
     private boolean correctValidation(String password, String enteredEmail, String repeatedEmail) {
 
         if (Objects.isNull(enteredEmail) || Objects.isNull(repeatedEmail) || Objects.isNull(password)) {
             return false;
         }
-        boolean sameEmail = enteredEmail.equals(repeatedEmail);
-        if (!sameEmail) {
-            return false;
-        }
-        return true;
+        return enteredEmail.equals(repeatedEmail);
     }
 }

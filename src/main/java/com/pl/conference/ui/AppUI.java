@@ -2,8 +2,6 @@ package com.pl.conference.ui;
 
 import com.pl.conference.ui.navigation.NavigationManager;
 import com.vaadin.annotations.Title;
-import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewDisplay;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.server.VaadinRequest;
@@ -12,7 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @SpringUI
 @Title("Konferencja")
-public class AppUI extends UI implements ViewDisplay {
+
+public class AppUI extends UI {
 
     private final SpringViewProvider springViewProvider;
     private final NavigationManager navigationManager;
@@ -26,7 +25,6 @@ public class AppUI extends UI implements ViewDisplay {
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
-        //UI.getCurrent().setPollInterval(5000);
         mainView = new MainView(navigationManager);
         mainView.build();
         setContent(mainView);
@@ -34,8 +32,4 @@ public class AppUI extends UI implements ViewDisplay {
         navigationManager.navigateToDefaultView();
     }
 
-    @Override
-    public void showView(View view) {
-
-    }
 }

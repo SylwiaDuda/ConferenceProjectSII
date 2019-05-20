@@ -46,7 +46,6 @@ public class MainView extends HorizontalLayout {
 
         setExpandRatio(content, 1.0F);
         setSizeFull();
-
     }
 
     private void createMenu() {
@@ -64,12 +63,11 @@ public class MainView extends HorizontalLayout {
         createSettingsButton();
         createSignInButton();
         createLogOutButton();
-        //addMenuComponents();
-        menu.addComponents(title, conferencePlan, signIn, settings, logOut);
+        addMenuComponents();
     }
 
     private void addMenuComponents() {
-        String loggedInUser = SessionManager.getLoggedInUser(getUI());
+        String loggedInUser = SessionManager.getLoggedInUserEmail(getUI());
         if (Objects.isNull(loggedInUser)) {
             menu.addComponents(title, conferencePlan, signIn);
         } else {
@@ -108,5 +106,6 @@ public class MainView extends HorizontalLayout {
     private void logout() {
         UI ui = getUI();
         SessionManager.closeVaadinSession(ui);
+        navigationManager.navigateToDefaultView();
     }
 }

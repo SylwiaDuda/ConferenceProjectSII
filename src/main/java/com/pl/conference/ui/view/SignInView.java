@@ -24,7 +24,7 @@ public class SignInView extends VerticalLayout implements View {
     private static final String CAPTION_LOGIN = "Login:";
     private static final String CAPTION_PASSWORD = "Hasło:";
     private static final String CAPTION_SIGN_IN = "Zaloguj się";
-    public static final String C_ENTER_CORRECT_DATA = "Wprowadź poprawne dane!";
+    private static final String C_ENTER_CORRECT_DATA = "Wprowadź poprawne dane!";
 
     private final UserService userService;
     private final NavigationManager navigationManager;
@@ -50,7 +50,7 @@ public class SignInView extends VerticalLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        String loggedInUser = SessionManager.getLoggedInUser(getUI());
+        User loggedInUser = SessionManager.getLoggedInUser(getUI());
         if (Objects.isNull(loggedInUser)) {
             this.removeAllComponents();
             init();
@@ -108,8 +108,8 @@ public class SignInView extends VerticalLayout implements View {
             User user = userService.signIn(email, password);
             if (Objects.nonNull(user)) {
                 UI ui = getUI();
-                SessionManager.setLoggedInUser(ui, email);
-                navigationManager.navigateTo(ConferencePlanView.class);
+                SessionManager.setLoggedInUser(ui, user);
+                getUI().getPage().reload();
             } else {
                 setErrorMessage();
             }
